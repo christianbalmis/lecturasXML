@@ -1,0 +1,61 @@
+<html>
+ <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 5px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div id="texto">
+        <h1>Libros</h1>
+        <button id="cargaCatalogo">Cargar catalogo de libros</button>
+    </div>
+    <table id="demo"></table>
+    <script>
+        document.getElementById("cargaCatalogo").addEventListener("click",cargarCatalogo);
+        function cargarCatalogo(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(this.readyState == 4 & this.status == 200) {
+                    cargarXML(this);
+                }
+            };
+            xhr.open("GET","libros.xml",true);
+            xhr.send();
+        }
+
+        function cargarXML (xml){
+           var docXML = xml.responseXML;
+            var tabla = "<tr><th>Artista</th><th>Titulo</th></tr>";
+            var libros = docXML.getElementsbyTagName("libreria");
+            for (var i = 0; i<libros.lenght; i++){
+                tabla += "<tr><td>";
+                tabla += libros[i].getElementsbyTagName("ISBN")[0].textContent;
+                tabla += "</td><td>";
+                tabla += libros[i].getElementsbyTagName("titulo")[0].textContent;
+                tabla += "</td></tr>";
+            }
+            document.getElementById("demo").innerHTML = tabla;
+
+
+        }
+
+
+    </script>
+    
+</body>
+</html>
